@@ -42,7 +42,7 @@ document.getElementById('manifest-placeholder').href = murl;
      ═══════════════════════════════════════════════════════ -->
 <script>
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDGOhZujtSEN-S6gBongv9eUzdB9yhPTf8",
+ apiKey: "AIzaSyDGOhZujtSEN-S6gBongv9eUzdB9yhPTf8",
   authDomain: "grind-app-76c96.firebaseapp.com",
   projectId: "grind-app-76c96",
   storageBucket: "grind-app-76c96.firebasestorage.app",
@@ -147,7 +147,7 @@ const FIREBASE_CONFIG = {
     50% { filter: drop-shadow(0 0 18px rgba(200,255,0,0.35)); transform: scale(1.04); }
   }
 
-  #login-screen svg { animation: logoPulse 3s ease-in-out infinite; }
+  #login-logo-svg { animation: logoPulse 3s ease-in-out infinite; display: block; }
 
   .login-tagline {
     color: var(--muted);
@@ -1153,11 +1153,11 @@ const FIREBASE_CONFIG = {
 <body>
 
 <!-- ══════════ LOGIN ══════════ -->
-<div id="login-screen" style="display:flex">
+<div id="login-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center">
 
   <!-- SVG Logo -->
   <div style="margin-bottom:12px">
-    <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <svg id="login-logo-svg" width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
       <!-- Outer ring -->
       <circle cx="60" cy="60" r="56" fill="none" stroke="#C8FF00" stroke-width="2" opacity="0.2"/>
       <!-- Inner ring -->
@@ -1661,7 +1661,7 @@ function parseJwt(token) {
 }
 
 function signInWithGoogle() {
-  if (CLIENT_ID === '343561388226-meuort49mffbqb35ip56r5hs2ofpr677.apps.googleusercontent.com') {
+  if (CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
     showToast('Kein Client ID — Demo-Modus');
     setTimeout(() => signInDemo(), 800);
     return;
