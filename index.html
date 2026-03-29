@@ -16,7 +16,7 @@
 <!-- 🔥 SCHRITT 2: Firebase Config hier eintragen -->
 <script>
 var FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDGOhZujtSEN-S6gBongv9eUzdB9yhPTf8",
+apiKey: "AIzaSyDGOhZujtSEN-S6gBongv9eUzdB9yhPTf8",
   authDomain: "grind-app-76c96.firebaseapp.com",
   projectId: "grind-app-76c96",
   storageBucket: "grind-app-76c96.firebasestorage.app",
@@ -44,9 +44,9 @@ button,input{font-family:'DM Sans',sans-serif}
 /* LOGIN */
 #login{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:var(--bg)}
 .logo-wrap{margin-bottom:14px}
-@keyframes pulse{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 22px rgba(200,255,0,.45))}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.85;transform:scale(1.03)}}
 .logo-wrap svg{animation:pulse 3s ease-in-out infinite;display:block}
-.wordmark{font-family:'Bebas Neue',sans-serif;font-size:82px;letter-spacing:6px;color:var(--lime);line-height:1;margin-bottom:5px}
+.wordmark{font-family:'Bebas Neue',Impact,sans-serif;font-size:82px;letter-spacing:6px;color:var(--lime);line-height:1;margin-bottom:5px}
 .tagline{color:var(--muted);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:50px}
 .login-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px 24px;width:100%;max-width:340px}
 .login-card h2{font-size:18px;font-weight:600;margin-bottom:6px}
@@ -61,7 +61,7 @@ button,input{font-family:'DM Sans',sans-serif}
 #app{display:none;flex-direction:column;min-height:100dvh}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 18px 11px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .tb-brand{display:flex;align-items:center;gap:8px}
-.tb-brand span{font-family:'Bebas Neue',sans-serif;font-size:25px;letter-spacing:3px;color:var(--lime)}
+.tb-brand span{font-family:'Bebas Neue',Impact,sans-serif;font-size:25px;letter-spacing:3px;color:var(--lime)}
 .tb-right{display:flex;align-items:center;gap:8px}
 #sync-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);opacity:0;transition:opacity .3s}
 .avatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--lime);object-fit:cover}
@@ -209,7 +209,7 @@ button,input{font-family:'DM Sans',sans-serif}
 <body>
 
 <!-- LOGIN -->
-<div id="login">
+<div id="login" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh">
   <div class="logo-wrap">
     <svg width="108" height="108" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
       <circle cx="60" cy="60" r="56" fill="none" stroke="#C8FF00" stroke-width="1.5" opacity="0.15"/>
@@ -245,7 +245,7 @@ button,input{font-family:'DM Sans',sans-serif}
 </div>
 
 <!-- APP -->
-<div id="app">
+<div id="app" style="display:none;flex-direction:column;min-height:100dvh">
   <div class="topbar">
     <div class="tb-brand">
       <svg width="24" height="24" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -474,6 +474,9 @@ function parseJwt(t){
   return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
 }
 
+// ── Wire up all DOM handlers ──────────────────────────────────
+function initHandlers() {
+
 document.getElementById('btn-g').onclick = () => {
   if (CID==='343561388226-meuort49mffbqb35ip56r5hs2ofpr677.apps.googleusercontent.com'){ toast('Kein Client ID — Demo-Modus'); setTimeout(demoIn,800); return; }
   try {
@@ -640,16 +643,6 @@ function renderLib(){
   el.querySelectorAll('.btn-del').forEach(b=>b.addEventListener('click',async()=>{ await delEx(b.dataset.id); renderLib(); renderPicker(); }));
 }
 
-document.getElementById('btn-add').onclick = async()=>{
-  const name=document.getElementById('ex-name').value.trim();
-  const kg=parseFloat(document.getElementById('ex-kg').value)||0;
-  const reps=parseInt(document.getElementById('ex-reps').value)||10;
-  const sets=parseInt(document.getElementById('ex-sets').value)||3;
-  if(!name){toast('⚠️ NAME FEHLT');return;}
-  await saveEx({id:String(Date.now()),name,kg,reps,sets});
-  ['ex-name','ex-kg','ex-reps','ex-sets'].forEach(id=>document.getElementById(id).value='');
-  renderLib(); renderPicker(); toast('ÜBUNG GESPEICHERT ✓');
-};
 
 // ── Stats ─────────────────────────────────────────────
 function renderStats(){
@@ -694,7 +687,17 @@ const mf={name:'GRIND — Fitness Tracker',short_name:'GRIND',start_url:'./',dis
 const ml=document.createElement('link');ml.rel='manifest';ml.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/json'}));document.head.appendChild(ml);
 
 // ── Init ──────────────────────────────────────────────
+
+}
+
+// ── PWA ───────────────────────────────────────────────────────
+  ['ex-name','ex-kg','ex-reps','ex-sets'].forEach(id=>document.getElementById(id).value='');
+  renderLib(); renderPicker(); toast('ÜBUNG GESPEICHERT ✓');
+};
+});
+
 document.addEventListener('DOMContentLoaded',()=>{
+  initHandlers();
   try{const s=sessionStorage.getItem('gu');if(s){user=JSON.parse(s);launch();return;}}catch(e){}
   document.getElementById('login').style.display='flex';
   document.getElementById('app').style.display='none';
